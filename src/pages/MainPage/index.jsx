@@ -2,10 +2,8 @@ import { useEffect, useState } from "react";
 import styles from "../MainPage/MainPage.styles.module.css";
 import { getNews } from "../../api/apiNews";
 import { NewsBanner } from "../../components/NewsBanner";
-import { Image } from "../../components/Image";
-import { formatTimeAgo } from "../../helpers/formatTimeAgo";
-import { NewsItem } from "../../components/NewsItem";
 import { NewsList } from "../../components/NewsList";
+import { Skeleton } from "../../components/Skeleton";
 
 const MainPage = () => {
   const [news, setNews] = useState([]);
@@ -26,16 +24,18 @@ const MainPage = () => {
     getNewsData();
   }, []);
 
-  //   console.log(response.news);
-
   return (
     <main className={styles.mainPageWrapper}>
       {news?.length > 0 && !isLoading ? (
         <NewsBanner item={news[0]} />
       ) : (
-        <p>Loading...</p> // Здесь будет скелетон
+        <Skeleton count={1} type="banner" /> 
       )}
-      <NewsList news={news}/>
+      {!isLoading ? (
+        <NewsList news={news} />
+      ) : (
+        <Skeleton count={10} type="item" />
+      )}
     </main>
   );
 };
